@@ -1,0 +1,27 @@
+<!-- Card com Informações da Conexão -->
+<div
+  id="requestInfoCard"
+  class="bg-[var(--card-bg-color)] text-[var(--card-text-color)] rounded-lg shadow-lg p-6"
+>
+  <h1 class="flex text-4xl font-bold mb-4 justify-center">
+    Informações da Requisição
+  </h1>
+  <table class="w-full hidden" id="requestInfoDataTable">
+    <tbody id="ipInfoTable">
+      <!-- Spinner de carregamento -->
+      <div id="requestInfoSpinner" class="spinner"></div>
+      <tr>
+        <td class="py-2 px-4 font-semibold">IP do Cliente</td>
+        <td class="py-2 px-4" id="XRealIP"></td>
+      </tr>
+      <tr>
+        <td class="py-2 px-4 font-semibold">Porta de Origem</td>
+        <td class="py-2 px-4" id="XForwardedSourcePort"></td>
+      </tr>
+      <tr>
+        <td class="py-2 px-4 font-semibold">Timestamp</td>
+        <td class="py-2 px-4" id="Timestamp"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

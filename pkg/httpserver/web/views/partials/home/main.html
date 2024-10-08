@@ -1,0 +1,14 @@
+<!-- Conteúdo Principal -->
+<div class="container mx-auto p-8">
+  <!-- Contêiner em Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Card com informações do IP -->
+    {{template "partials/home/cards/ipinfo"}}
+
+    <!-- Card com Informações de Requisição -->
+    {{template "partials/home/cards/requestinfo"}}
+
+    <!-- Card com Informações de Conexão -->
+    {{template "partials/home/cards/networkinfo"}}
+  </div>
+</div>

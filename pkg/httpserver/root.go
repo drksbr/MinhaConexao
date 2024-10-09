@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/websocket/v2"
 )
 
 //go:embed react/dist/*
@@ -46,6 +47,23 @@ func InitHTTPServer() {
 	for _, file := range files {
 		log.Printf("Arquivo estático: %s\n", file.Name())
 	}
+
+	app.Get("/wsping", websocket.New(func(c *websocket.Conn) {
+		defer c.Close()
+		for {
+			// Lê a mensagem do cliente
+			_, msg, err := c.ReadMessage()
+			if err != nil {
+				log.Println("read error:", err)
+				break
+			}
+			// Envia de volta a mesma mensagem
+			if err := c.WriteMessage(websocket.TextMessage, msg); err != nil {
+				log.Println("write error:", err)
+				break
+			}
+		}
+	}))
 
 	// Registra os endpoints
 	RegisterEndpoints(app)

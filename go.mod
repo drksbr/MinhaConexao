@@ -2,7 +2,15 @@ module github.com/drksbr/minhaconexao
 
 go 1.23.1
 
-require github.com/gofiber/fiber/v2 v2.52.5
+require (
+	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/gofiber/websocket/v2 v2.2.1
+)
+
+require (
+	github.com/fasthttp/websocket v1.5.3 // indirect
+	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect

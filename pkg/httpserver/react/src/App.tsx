@@ -4,8 +4,9 @@ import GridContainer from "./components/general/grid";
 import IPInfo from "./components/cards/ipinfo";
 import Navbar from "./components/general/navbar";
 import RequestInfo from "./components/cards/requestInfo";
-import PingJitterGraph from "./components/cards/pingjittergraph";
+// import PingJitterGraph from "./components/cards/pingjittergraph";
 import Logo from "./components/general/logo";
+import TesteCard from "./components/cards/testeCard";
 
 function App() {
 
@@ -25,7 +26,8 @@ function App() {
         <GridContainer>
           <IPInfo />
           <RequestInfo />
-          <PingJitterGraph />
+          {/* <PingJitterGraph /> */}
+          <TesteCard />
         </GridContainer>
       </Box>
 

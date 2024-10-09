@@ -1,27 +1,24 @@
-#!/bin/bash
+#!/bin/sh
 
-# Exit immediately if a command exits with a non-zero status
-set -e
+# Build the frontend
+echo "Building the project..."
+cd frontend/
+bun install
+bun run build
+cd ..
+# Build the backend
+echo "Building the backend..."
+cd backend/
+GO_ENABLED=0 GOOS=linux go build -ldflags="-s -w"
+cd ..
 
-# Build the React project
-echo "Building React project..."
-cd ./pkg/httpserver/react/
-npm install
-npm run build
+# Build the docker image
+echo "Building the docker image..."
+docker build -t drks/minhaconexao:latest .
 
-# Build the Go project
-echo "Building Go project..."
-cd /Users/isaacramon/Projects/MinhaConexao/go-app
-go build -o app
+# Push the docker image
+echo "Pushing the docker image..."
+docker push drks/minhaconexao:latest
 
-# Build the Docker container
-echo "Building Docker container..."
-cd /Users/isaacramon/Projects/MinhaConexao
-docker build -t minha-conexao:latest .
-
-# Push the Docker container to the repository
-echo "Pushing Docker container..."
-docker tag minha-conexao:latest your-docker-repo/minha-conexao:latest
-docker push your-docker-repo/minha-conexao:latest
-
-echo "Build and push completed successfully."
+# Bye bye
+echo "Done!"

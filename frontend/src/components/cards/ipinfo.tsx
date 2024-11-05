@@ -13,8 +13,9 @@ import {
     Image,
     Link,
 } from '@chakra-ui/react';
-import { RefreshCcw } from 'lucide-react';
+import { RefreshCcw, Share2Icon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import useShare from '@/hooks/useShare';
 
 interface IPInfoData {
     ip: string;
@@ -37,6 +38,9 @@ const IPInfo: React.FC = () => {
 
         return response.json();
     };
+
+    // Referência do card para captura de tela
+    const { ref, share } = useShare();
 
     const {
         data,
@@ -63,23 +67,38 @@ const IPInfo: React.FC = () => {
             p={5}
             boxShadow="md"
             position="relative"
-            _hover={{ boxShadow: 'xl', transform: 'scale(1.05)' }}
+            _hover={{ boxShadow: 'xl', transform: 'scale(1.02)' }}
             transition="0.3s"
             maxW="full"
             minH={"400px"}
+            ref={ref}
         >
             {/* Header do card com título e botão de refresh */}
             <Flex justifyContent="space-between" alignItems="center" mb={5}>
                 <Heading size="lg">Informações IP</Heading>
-                {/* Botão de Refresh */}
-                <IconButton
-                    aria-label="Refresh"
-                    icon={<RefreshCcw />}
-                    onClick={refreshFunction}
-                    size="sm"
-                    variant="ghost"
-                    isLoading={isFetching}
-                />
+
+                {/* Botões */}
+                <Box alignContent={"end"}>
+                    <IconButton
+                        aria-label="Share"
+                        icon={
+                            <Share2Icon size={18} />
+                        }
+                        onClick={share}
+                        size="sm"
+                        variant="ghost"
+                    />
+                    <IconButton
+                        aria-label="Refresh"
+                        icon={
+                            <RefreshCcw size={18} />
+                        }
+                        onClick={refreshFunction}
+                        size="sm"
+                        variant="ghost"
+                        isLoading={isFetching}
+                    />
+                </Box>
             </Flex>
 
             {/* Conteúdo do Card */}

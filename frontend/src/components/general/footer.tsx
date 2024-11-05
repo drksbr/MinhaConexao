@@ -9,6 +9,8 @@ const Footer = () => {
             textAlign="center"
             bg={useColorModeValue('gray.100', 'gray.900')}
             color={useColorModeValue('gray.600', 'gray.400')}
+            position="fixed"
+            bottom={0}
         >
             <Text fontSize="sm">
                 Desenvolvido por MW DevTeam ❤️ © {new Date().getFullYear()}

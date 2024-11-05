@@ -10,15 +10,17 @@ import {
     Flex,
     Text,
 } from '@chakra-ui/react';
-import { RefreshCcw } from 'lucide-react';
+import { Share2Icon, TimerResetIcon } from 'lucide-react';
 import {
     LineChart,
     Line,
     ResponsiveContainer,
     Legend,
-    Tooltip
+    Tooltip,
+    CartesianGrid
 } from 'recharts';
 import usePing from '@/hooks/usePing';
+import useShare from '@/hooks/useShare';
 
 interface Measurement {
     timestamp: number;
@@ -32,7 +34,11 @@ const PingJitterChart: React.FC = () => {
     const [isFetching, setIsFetching] = useState<boolean>(false);
 
     // Utiliza o hook usePing para obter ping e jitter
+    // const { ping, jitter } = usePing(`ws://localhost:8080/wsping`, 500, 30);
     const { ping, jitter } = usePing(`${window.location.origin.replace(/^http/, 'ws')}/wsping`, 500, 30);
+
+    // Referência do card para captura de tela
+    const { ref, share } = useShare();
 
     // Atualiza o estado com as novas medições
     useEffect(() => {
@@ -70,22 +76,38 @@ const PingJitterChart: React.FC = () => {
             p={5}
             boxShadow="md"
             position="relative"
-            _hover={{ boxShadow: 'xl', transform: 'scale(1.05)' }}
+            _hover={{ boxShadow: 'xl', transform: 'scale(1.02)' }}
             transition="0.3s"
             maxW="full"
             minH="400px"
+            ref={ref}
         >
             {/* Header do card com título e botão de refresh */}
             <Flex justifyContent="space-between" alignItems="center" mb={2}>
                 <Heading size="lg">Ping e Jitter</Heading>
-                <IconButton
-                    aria-label="Refresh"
-                    icon={<RefreshCcw />}
-                    onClick={refreshFunction}
-                    size="sm"
-                    variant="ghost"
-                    isLoading={isFetching}
-                />
+
+                {/* Botões */}
+                <Box alignContent={"end"}>
+                    <IconButton
+                        aria-label="Share"
+                        icon={
+                            <Share2Icon size={18} />
+                        }
+                        onClick={share}
+                        size="sm"
+                        variant="ghost"
+                    />
+                    <IconButton
+                        aria-label="Refresh"
+                        icon={
+                            <TimerResetIcon size={18} />
+                        }
+                        onClick={refreshFunction}
+                        size="sm"
+                        variant="ghost"
+                        isLoading={isFetching}
+                    />
+                </Box>
             </Flex>
 
             {/* Conteúdo do Card */}
@@ -100,25 +122,26 @@ const PingJitterChart: React.FC = () => {
             ) : (
                 <Box>
                     <Box mb={5}>
-                        <Flex direction={{ base: 'column', md: 'row' }} gap={5} justifyContent="center">
-                            <Text fontSize='sm'>
-                                {data.length > 0 && `Ping: ${data[data.length - 1].ping} ms | Jitter: ${data[data.length - 1].jitter} ms`}
+                        <Box width="100%">
+                            <Text fontSize="md" fontWeight="bold">
+                                Realtime:
                             </Text>
-                            <Text fontSize='sm'>
-                                {/* Média de ping e jitter */}
-                                {data.length > 0 && `Média Ping/Jitter: ${Math.round(data.reduce((acc, curr) => acc + curr.ping, 0) / data.length)} ms / ${Math.round(data.reduce((acc, curr) => acc + curr.jitter, 0) / data.length)} ms`}
-                            </Text>
-                        </Flex>
+                            <Text fontSize={'sm'}>{data.length > 0 && `Atual Ping: ${data[data.length - 1].ping} ms | Jitter: ${data[data.length - 1].jitter} ms`}</Text>
+                            <Text fontSize={'sm'}>{data.length > 0 && `Média Ping: ${Math.round(data.reduce((acc, curr) => acc + curr.ping, 0) / data.length)} ms | Jitter: ${Math.round(data.reduce((acc, curr) => acc + curr.jitter, 0) / data.length)} ms`}</Text>
+                        </Box>
                     </Box>
                     <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={data}>
+                        <LineChart
+                            data={data}
+                            margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                        >
+                            <CartesianGrid opacity={"20%"} />
+
                             <Legend />
                             <Tooltip
                                 labelFormatter={(label) => new Date(label).toLocaleString()}
                                 formatter={(value, name) => [`${value} ms`, name]}
                             />
-                            {/* <CartesianGrid color='grey' /> */}
-
                             <Line
                                 type="monotone"
                                 dataKey="ping"

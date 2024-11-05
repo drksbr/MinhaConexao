@@ -1,4 +1,3 @@
-// src/components/IPInfo.tsx
 import React from 'react';
 import {
     Text,
@@ -11,8 +10,9 @@ import {
     Grid,
     GridItem,
 } from '@chakra-ui/react';
-import { RefreshCcw } from 'lucide-react';
+import { RefreshCcw, Share2Icon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import useShare from '@/hooks/useShare';
 
 
 export interface RequestInfoData {
@@ -23,6 +23,9 @@ export interface RequestInfoData {
 
 
 const RequestInfo: React.FC = () => {
+    // Referência do card para captura de tela
+    const { ref, share } = useShare();
+
     const fetchRequestInfo = async (): Promise<RequestInfoData> => {
         const response = await fetch('/requestinfo');
         if (!response.ok) {
@@ -62,23 +65,38 @@ const RequestInfo: React.FC = () => {
             p={5}
             boxShadow="md"
             position="relative"
-            _hover={{ boxShadow: 'xl', transform: 'scale(1.05)' }}
+            _hover={{ boxShadow: 'xl', transform: 'scale(1.02)' }}
             transition="0.3s"
             maxW="full"
             minH={"400px"}
+            ref={ref}
         >
             {/* Header do card com título e botão de refresh */}
             <Flex justifyContent="space-between" alignItems="center" mb={5}>
                 <Heading size="lg">Requisição HTTP</Heading>
-                {/* Botão de Refresh */}
-                <IconButton
-                    aria-label="Refresh"
-                    icon={<RefreshCcw />}
-                    onClick={refreshFunction}
-                    size="sm"
-                    variant="ghost"
-                    isLoading={isFetching}
-                />
+
+                {/* Botões */}
+                <Box alignContent={"end"}>
+                    <IconButton
+                        aria-label="Share"
+                        icon={
+                            <Share2Icon size={18} />
+                        }
+                        onClick={share}
+                        size="sm"
+                        variant="ghost"
+                    />
+                    <IconButton
+                        aria-label="Refresh"
+                        icon={
+                            <RefreshCcw size={18} />
+                        }
+                        onClick={refreshFunction}
+                        size="sm"
+                        variant="ghost"
+                        isLoading={isFetching}
+                    />
+                </Box>
             </Flex>
 
             {/* Conteúdo do Card */}

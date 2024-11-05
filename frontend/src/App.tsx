@@ -1,13 +1,32 @@
 import { Box } from "@chakra-ui/react";
 import Footer from "@/components/general/footer";
 import GridContainer from "@/components/general/grid";
-import IPInfo from "@/components/cards/ipinfo";
-import Navbar from "@/components/general/navbar";
-import RequestInfo from "@/components/cards/requestInfo";
-import Logo from "@/components/general/logo";
-import PingJitterChart from "@/components/cards/pingjittergraph";
+import { lazy, Suspense } from "react";
 
+const IPInfo = lazy(() => import("@/components/cards/ipinfo"));
+const Navbar = lazy(() => import("@/components/general/navbar"));
+const RequestInfo = lazy(() => import("@/components/cards/requestInfo"));
+const Logo = lazy(() => import("@/components/general/logo"));
+const PingJitterChart = lazy(() => import("@/components/cards/pingjittergraph"));
+const SpeedTestCard = lazy(() => import("@/components/cards/newBandwidth"));
+
+
+// Componente principal
 function App() {
+
+  console.dir(`                                                                                                                   
+           ███      ███  ▒▒▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒▒▒▒▒▒                                                               
+          ▓█▒█▓    ██▓██  ▒▒░      ▒▒   ▒▒▒      ▒▒                                           ▓░▒▓                 
+         ██░  █▓  ▓██  ██  ▒▒       ▒▒ ▒▒▒      ▒▒        ▒███░  ▒███▓   █     █   ██  ░███▓  ▓███░  ▒████  ▓███░  
+        ██░    ██  ▓    ██  ▒▒       ▒▒▒▒      ▒▒░        █▒    ▒█   ▓▓  █     █   ██  █     ██   █  ██     █░     
+       ▓█▒      ██       ██  ▒▒       ▒▒      ▒▒░          ░██  ██   ▓█  █     █   ██ ░█     █▓   █░ █████   ▒██   
+      ▓█▒      ███▓       ██  ▒▒    ░  ▒▒    ▒▒░             ▓█ ░█   █▒  █     █▓  █▒  █░    ██   █  ██        ▓█  
+     ▓█▒      ███░██       ██  ▒▒  ▒▒░  ▒▒  ░▒▒           ▒▒▓▒    ▒▓▒    ▒▓▓▒▒  ▒▓▒░    ▒█▓▒  ░▒▓▒    ▒▓▓▒  ▒▓▓▒   
+    ▒██░░░░░░██▓  ░██░░░░░░▒██  ▒▒▒▒▒    ▒▒▒▒▒                                            █                        
+   ░▓▓▓▓▓▓▓▓▓▓▒     ▓▓▓▓▓▓▓▓▓▓▓  ▒▒▒      ▒▒░                                                                      
+   We love dev ❤️
+   By Isaac Diniz | @drksbr (github)
+   `);
 
   return (
     <Box display="flex" flexDirection="column" minH="100vh">
@@ -15,7 +34,7 @@ function App() {
       <Navbar />
 
       {/* Conteúdo principal */}
-      <Box flex="1" p={5}>
+      <Box>
         {/* Adiciona a logmarca centralizada e com espaçamento inferior */}
         <Box textAlign="center">
           <Logo className="md:w-1/5 w-3/4 mx-auto" />
@@ -23,10 +42,13 @@ function App() {
 
         {/* Grid Container centralizado */}
         <GridContainer>
-          <IPInfo />
-          <RequestInfo />
-          {/* <PingJitterGraph /> */}
-          <PingJitterChart />
+          {/* Suspense */}
+          <Suspense fallback={<p>Carregando...</p>}>
+            <IPInfo />
+            <RequestInfo />
+            <PingJitterChart />
+            <SpeedTestCard />
+          </Suspense>
         </GridContainer>
       </Box>
 

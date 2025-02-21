@@ -1,0 +1,28 @@
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: npm
+    restart: always
+    ports:
+      - "80:80" # HTTP
+      - "81:81" # Painel de administração do NPM
+      - "443:443" # HTTPS
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - web
+
+  minhaconexao:
+    image: drks/minhaconexao:latest
+    container_name: minhaconexao
+    networks:
+      - web
+
+volumes:
+  npm_data:
+  npm_letsencrypt:
+
+networks:
+  web:
+    driver: bridge

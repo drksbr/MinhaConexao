@@ -25,7 +25,7 @@ interface IPInfoData {
     country: string;
     loc: string;
     org: string;
-    mss: number;
+    mtu_mss: MssMtuData;
     timezone: string;
     postal?: string;
 }
@@ -48,8 +48,9 @@ const IPInfo: React.FC = () => {
         if (!response.ok) {
             throw new Error('Falha na resposta da rede');
         }
-        const result : IPInfoData = await response.json();
+        const result: IPInfoData = await response.json();
         const mssMtu = await fetchMssMtu();
+        console.log(mssMtu);
         return {
             ip: result.ip,
             hostname: result.hostname,
@@ -60,10 +61,10 @@ const IPInfo: React.FC = () => {
             org: result.org,
             timezone: result.timezone,
             postal: result.postal,
-            mss: mssMtu.mss,
+            mtu_mss: mssMtu,
         };
     };
-   
+
 
     // Referência do card para captura de tela
     const { ref, share } = useShare();
@@ -147,10 +148,10 @@ const IPInfo: React.FC = () => {
 
                         {/* Linha 2 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
-                            <Text fontWeight="extrabold" textAlign={'right'}>MSS</Text>
+                            <Text fontWeight="extrabold" textAlign={'right'}>MTU / MSS</Text>
                         </GridItem>
                         <GridItem pl={2}>
-                            <Text>{data.mss || 'N/A'} Bytes</Text>
+                            <Text>{data.mtu_mss ? `${data.mtu_mss.mtu} bytes / ${data.mtu_mss.mss} bytes` : 'N/A'}</Text>
                         </GridItem>
 
                         {/* Linha 3 */}

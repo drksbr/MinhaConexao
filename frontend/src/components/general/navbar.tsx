@@ -4,7 +4,7 @@ import { SunIcon, MoonIcon } from 'lucide-react';
 
 const Navbar = () => {
     const { colorMode, toggleColorMode } = useColorMode();
-const BUILDTAG = "v0.0.3-alpha-71";
+const BUILDTAG = "v0.0.3-alpha-74";
 
     return (
         <Box as="nav" p={4} boxShadow="md" bg={colorMode === 'light' ? 'gray.100' : 'gray.900'}>

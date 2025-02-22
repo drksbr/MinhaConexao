@@ -25,19 +25,45 @@ interface IPInfoData {
     country: string;
     loc: string;
     org: string;
+    mss: number;
     timezone: string;
     postal?: string;
 }
+interface MssMtuData {
+    mss: number;
+    mtu: number;
+}
 
 const IPInfo: React.FC = () => {
-    const fetchIPInfo = async (): Promise<IPInfoData> => {
-        const response = await fetch('https://ipinfo.io/json'); // Substitua 'YOUR_TOKEN' pelo seu token real, se necessário
+    const fetchMssMtu = async (): Promise<MssMtuData> => {
+        const response = await fetch('https://mss-teste.ppnetwork.app:8443/mss-mtu');
         if (!response.ok) {
             throw new Error('Falha na resposta da rede');
         }
 
         return response.json();
+    }
+    const fetchIPInfo = async (): Promise<IPInfoData> => {
+        const response = await fetch('https://ipinfo.io/json'); // Substitua 'YOUR_TOKEN' pelo seu token real, se necessário
+        if (!response.ok) {
+            throw new Error('Falha na resposta da rede');
+        }
+        const result : IPInfoData = await response.json();
+        const mssMtu = await fetchMssMtu();
+        return {
+            ip: result.ip,
+            hostname: result.hostname,
+            city: result.city,
+            region: result.region,
+            country: result.country,
+            loc: result.loc,
+            org: result.org,
+            timezone: result.timezone,
+            postal: result.postal,
+            mss: mssMtu.mss,
+        };
     };
+   
 
     // Referência do card para captura de tela
     const { ref, share } = useShare();
@@ -121,13 +147,21 @@ const IPInfo: React.FC = () => {
 
                         {/* Linha 2 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
+                            <Text fontWeight="extrabold" textAlign={'right'}>MSS</Text>
+                        </GridItem>
+                        <GridItem pl={2}>
+                            <Text>{data.mss || 'N/A'} Bytes</Text>
+                        </GridItem>
+
+                        {/* Linha 3 */}
+                        <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Hostname</Text>
                         </GridItem>
                         <GridItem pl={2}>
                             <Text>{data.hostname || 'N/A'}</Text>
                         </GridItem>
 
-                        {/* Linha 3 */}
+                        {/* Linha 4 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Cidade</Text>
                         </GridItem>
@@ -135,7 +169,7 @@ const IPInfo: React.FC = () => {
                             <Text>{data.city}</Text>
                         </GridItem>
 
-                        {/* Linha 4 */}
+                        {/* Linha 5 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Região</Text>
                         </GridItem>
@@ -143,7 +177,7 @@ const IPInfo: React.FC = () => {
                             <Text>{data.region}</Text>
                         </GridItem>
 
-                        {/* Linha 5 */}
+                        {/* Linha 6 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>País</Text>
                         </GridItem>
@@ -154,7 +188,7 @@ const IPInfo: React.FC = () => {
                             </Flex>
                         </GridItem>
 
-                        {/* Linha 6 */}
+                        {/* Linha 7 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Localização</Text>
                         </GridItem>
@@ -170,7 +204,7 @@ const IPInfo: React.FC = () => {
                             </Flex>
                         </GridItem>
 
-                        {/* Linha 7 */}
+                        {/* Linha 8 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Organização</Text>
                         </GridItem>
@@ -178,7 +212,7 @@ const IPInfo: React.FC = () => {
                             <Text>{data.org}</Text>
                         </GridItem>
 
-                        {/* Linha 8 */}
+                        {/* Linha 9 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Timezone</Text>
                         </GridItem>
@@ -186,7 +220,7 @@ const IPInfo: React.FC = () => {
                             <Text>{data.timezone}</Text>
                         </GridItem>
 
-                        {/* Linha 9 */}
+                        {/* Linha 10 */}
                         <GridItem borderRight="1px dashed gray" pr={4}>
                             <Text fontWeight="extrabold" textAlign={'right'}>Postal</Text>
                         </GridItem>
